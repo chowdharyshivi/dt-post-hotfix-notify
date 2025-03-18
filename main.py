@@ -50,7 +50,7 @@ def get_linear_details(issueId):
     }
     headers = {"Accept": "application/json", "Authorization": LINEAR_API_KEY}
     api_response = requests.post(url=LINEAR_API_URL, json=input_json, headers=headers)
-    print(api_response.text)
+    print(api_response)
     tmp_list = json.loads(api_response.text)["data"]["issue"]
     extracted_info = {}
     assignee_email = tmp_list["assignee"]["email"]
