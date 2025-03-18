@@ -1,42 +1,44 @@
-name: "Post Hotfix Confirm"
-description: "A custom GitHub Action to send Slack notifications to validate if hotfixes are getting tested."
+name: "Hotfix Slack Notification"
+description: "Notify Slack when a hotfix PR is merged"
+author: "chowdharyshivi"
 
 inputs:
   pr_title:
-    description: "Title of the GitHub Pull Request"
+    description: "PR title"
     required: true
   pr_url:
-    description: "URL of the Pull Request"
+    description: "PR URL"
     required: true
   slack_token:
-    description: "Slack Bot Token"
-    required: true
-  slack_channel:
-    description: "Slack Channel to send the message"
+    description: "Slack bot token"
     required: true
   linear_api_key:
-    description: "API Key for Linear"
+    description: "Linear API Key"
+    required: true
+  slack_channel:
+    description: "Slack Channel ID"
     required: true
 
 runs:
   using: "composite"
   steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: "3.9"
+        python-version: "3.12"
 
-    - name: Install Dependencies
-      run: pip install -r requirements.txt
+    - name: Install dependencies
+      run: |
+        python -m venv .venv
+        source .venv/bin/activate
+        pip install -r requirements.txt
       shell: bash
 
-    - name: Run Python Script
-      run: python main.py
+    - name: Run Python script
+      run: |
+        source .venv/bin/activate
+        python main.py
       shell: bash
-      env:
-        PR_TITLE: ${{ inputs.pr_title }}
-        PR_URL: ${{ inputs.pr_url }}
-        SLACK_TOKEN: ${{ inputs.slack_token }}
-        SLACK_CHANNEL: ${{ inputs.slack_channel }}
-        LINEAR_API_KEY: ${{ inputs.linear_api_key }}
-
