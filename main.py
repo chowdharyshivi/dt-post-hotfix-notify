@@ -138,35 +138,18 @@ def main():
         print(f"✅ Slack member id is {slack_member_id}")
 
         message_blocks = [
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": f"👋 *<@{slack_member_id}> please confirm this message after verifying your hotfix on prod.*\n\n"
-                        f"*🔗 PR Title:* <{GITHUB_PR_URL}|{GITHUB_PR_TITLE}>\n\n"
-                        f"*🎟️ Linear ID:* {linear_id}\n\n"
-            }
-        },
-        {  # Separate block for dropdown at the bottom
-            "type": "actions",
-            "elements": [
-                {
-                    "type": "static_select",
-                    "placeholder": {"type": "plain_text", "text": "☑️ Click to Confirm"},
-                    "options": [
-                        {
-                            "text": {"type": "plain_text", "text": "✔️ Confirmed"},
-                            "value": f"confirmed_{linear_id}"
-                        }
-                    ],
-                    "action_id": f"confirm_hotfix_action_{linear_id}"
-                }
-            ]
+    {
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": f"👋 *<@{slack_member_id}> please confirm after verifying the hotfix on prod.*\n\n"
+                    f"🔗 *PR:* <{GITHUB_PR_URL}|{GITHUB_PR_TITLE}>\n"
+                    f"🎟️ *Linear ID:* `{linear_id}`\n\n"
+                    f"➡️ *React with ✅ to confirm.*"
         }
-    ]
+    }
+]
 
-
-        
         print("📩 Sending Slack notification...")
         send_slack_message(message_blocks=message_blocks)
         print("✅ Slack notification sent")
