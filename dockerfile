@@ -11,4 +11,4 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Set the entrypoint for the action
-ENTRYPOINT ["python", "main.py"]
+CMD ["python3", "/app/main.py"]
