@@ -5,12 +5,9 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 from http import client
 import json
-import re
 import time
 from venv import logger
-import requests
-from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
+from datetime import datetime, timedelta
 
 GITHUB_PR_TITLE = os.getenv("PR_TITLE")
 GITHUB_PR_URL = os.getenv("PR_URL")
@@ -96,12 +93,17 @@ def post_message(channel_name, text):
         logger.error(f"Error posting message: {e}")
 
 def send_slack_message(message_blocks):
+    # Calculate timestamp for 10 minutes from now
+    schedule_time = datetime.now() + timedelta(minutes=10)
+    unix_timestamp = int(schedule_time.timestamp())
+    
     payload = {
         "channel": SLACK_CHANNEL,
-        "blocks": message_blocks
+        "blocks": message_blocks,
+        "post_at": unix_timestamp
     }
     response = requests.post(
-        "https://slack.com/api/chat.postMessage",
+        "https://slack.com/api/chat.scheduleMessage",
         headers={"Authorization": f"Bearer {SLACK_TOKEN}", "Content-Type": "application/json"},
         json=payload
     )
@@ -148,9 +150,12 @@ def main():
     }
 ]
 
-        print("📩 Sending Slack notification...")
-        send_slack_message(message_blocks=message_blocks)
-        print("✅ Slack notification sent")
+        print("📩 Scheduling Slack notification for 10 minutes from now...")
+        response = send_slack_message(message_blocks=message_blocks)
+        if response.get("ok"):
+            print("✅ Slack notification scheduled successfully")
+        else:
+            print(f"❌ Failed to schedule Slack notification: {response.get('error', 'Unknown error')}")
     else:
         print("✅ PR is not a hotfix, skipping notification.")
 
