@@ -142,9 +142,8 @@ def main():
         "type": "section",
         "text": {
             "type": "mrkdwn",
-            "text": f"<@{slack_member_id}> Quick reminder to verify your hotfix.\n"
+            "text": f"<@{slack_member_id}> Please tick when you've verified this hotfix and comment why this required a hotfix.\n"
                     f"PR: <{GITHUB_PR_URL}|{GITHUB_PR_TITLE}>\n"
-                    f"Please tick this message after you have verified in prod."
         }
     }
 ]
