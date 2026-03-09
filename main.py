@@ -144,7 +144,7 @@ def main():
         "type": "section",
         "text": {
             "type": "mrkdwn",
-            "text": f"<@{slack_member_id}> Please tick when you've verified this hotfix and comment why this required a hotfix.\n"
+            "text": f"<@{slack_member_id}> Please tick when you've verified this hotfix and comment why this required a hotfix and who approved this hotfix.\n"
                     f"PR: <{GITHUB_PR_URL}|{GITHUB_PR_TITLE}>\n"
         }
     }
