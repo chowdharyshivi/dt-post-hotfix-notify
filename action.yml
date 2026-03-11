@@ -18,6 +18,9 @@ inputs:
   slack_channel:
     description: "Slack Channel ID"
     required: true
+  prefix: 
+    description: "Hotfix message prefix"
+    required: false
 
 runs:
   using: "docker"
@@ -28,3 +31,4 @@ runs:
     SLACK_TOKEN: ${{ inputs.slack_token }}
     LINEAR_API_KEY: ${{ inputs.linear_api_key }}
     SLACK_CHANNEL: ${{ inputs.slack_channel }}
+    PREFIX: ${{ inputs.prefix }}
