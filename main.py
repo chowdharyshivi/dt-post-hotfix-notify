@@ -14,6 +14,7 @@ GITHUB_PR_URL = os.getenv("PR_URL")
 SLACK_TOKEN = os.getenv("SLACK_TOKEN")
 SLACK_CHANNEL = os.getenv("SLACK_CHANNEL")
 LINEAR_API_KEY = os.getenv("LINEAR_API_KEY")
+PREFIX = os.getenv("PREFIX")
 
 LINEAR_API_URL = "https://api.linear.app/graphql"
 client = WebClient(token=SLACK_TOKEN)
@@ -138,14 +139,16 @@ def main():
             return
         
         print(f"✅ Slack member id is {slack_member_id}")
-
+        if PREFIX:
+            message_text = f"<@{slack_member_id}> Please tick when you've verified this {PREFIX}-hotfix and comment why this required a hotfix and who approved this hotfix.\n"
+        else:
+            message_text = f"<@{slack_member_id}> Please tick when you've verified this hotfix and comment why this required a hotfix and who approved this hotfix.\n"
         message_blocks = [
     {
         "type": "section",
         "text": {
             "type": "mrkdwn",
-            "text": f"<@{slack_member_id}> Please tick when you've verified this hotfix and comment why this required a hotfix and who approved this hotfix.\n"
-                    f"PR: <{GITHUB_PR_URL}|{GITHUB_PR_TITLE}>\n"
+            "text": message_text + f"PR: <{GITHUB_PR_URL}|{GITHUB_PR_TITLE}>\n"
         }
     }
 ]
