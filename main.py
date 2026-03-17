@@ -30,6 +30,11 @@ def extract_linear_id(pr_title):
     """Extract Linear issue ID from the PR title (e.g., 'Fix bug ABC-123')"""
     match = re.search(r"[A-Z]+-\d+", pr_title)
     return match.group(0) if match else None
+    
+def extract_repo_name(pr_url):
+    """Extract repo name from GitHub PR URL"""
+    match = re.search(r"github\.com/[^/]+/([^/]+)/pull/", pr_url)
+    return match.group(1) if match else None
 
 def get_linear_details(issueId):
     tmp_list = []
@@ -126,6 +131,10 @@ def main():
         print(f"✅ Found Linear ID: {linear_id}")
         assignee_email,url=get_linear_details(issueId=linear_id)
 
+        repo_name = extract_repo_name(GITHUB_PR_URL)
+        print(f"✅ Repo name: {repo_name}")
+        repo_text = f"Repo: {repo_name}\n" if repo_name else ""
+
         if not assignee_email:
             print("❌ Assignee email is None, assigning it to default email - shivi@drivetrain.ai")
             assignee_email = "shivi@drivetrain.ai"
@@ -148,7 +157,7 @@ def main():
         "type": "section",
         "text": {
             "type": "mrkdwn",
-            "text": message_text + f"PR: <{GITHUB_PR_URL}|{GITHUB_PR_TITLE}>\n"
+            "text": message_text + repo_text + f"PR: <{GITHUB_PR_URL}|{GITHUB_PR_TITLE}>\n"
         }
     }
 ]
